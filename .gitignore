@@ -83,8 +83,8 @@ celerybeat-schedule
 venv/
 ENV/
 
-# solarlint
-.idea/sonarlint
+# pycharm
+.idea
 
 # Spyder project settings
 .spyderproject
