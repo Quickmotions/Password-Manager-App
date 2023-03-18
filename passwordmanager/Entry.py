@@ -1,9 +1,10 @@
 class Entry:
-    site: str
+    domain: str
     username: str
     password: hash
 
-    def __init__(self, site: "", username: "", password):
-        self.site = site
+    def __init__(self, code, domain: "", username: "", password):
+        self.code = code
+        self.domain = domain
         self.username = username
         self.password = password
