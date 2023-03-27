@@ -1,10 +1,12 @@
+from password import Password
+
 class Entry:
     domain: str
     username: str
-    password: hash
+    password: Password
 
     def __init__(self, code, domain: "", username: "", password):
-        self.code = code
+        self.sortCode = code
         self.domain = domain
         self.username = username
         self.password = password
