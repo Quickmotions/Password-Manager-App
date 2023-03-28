@@ -1,25 +1,28 @@
-from entry import Entry
-from sortcode import SortCode
+from entry import EntryFactory
 
 
 class PasswordManager:
-    entries: dict
 
     def __init__(self):
-        self.entries: dict[SortCode, Entry]
+        self.entries = []
 
-    def create_entry(self, domain: str, username: str, password: str):
-        # input validation
-        if not all([domain, username, password]):
-            raise ValueError("All fields are required.")
+    def create_entry(self, entry_type, **kwargs):
+        entry = EntryFactory.create_entry(entry_type, **kwargs)
+        self.entries.append(entry)
 
-        sort_code = SortCode()
-        self.entries[sort_code] = Entry(domain=domain, username=username, password=password, code=sort_code)
+    def delete_entry(self, entry_id):
+        for entry in self.entries:
+            if entry.id == entry_id:
+                self.entries.remove(entry)
 
+    def edit_entry(self, entry_id, **kwargs):
+        for entry in self.entries:
+            if entry.id == entry_id:
+                entry.update(**kwargs)
 
-    def edit_entry(self):
-        ...
-
-    def delete_entry(self, sortCode: str):
-        if sortCode in self.entries:
-            self.entries.pop(sortCode)
+    def search(self, query):
+        results = []
+        for entry in self.entries:
+            if entry.matches_query(query):
+                results.append(entry)
+        return results
