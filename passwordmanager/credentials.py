@@ -1,3 +1,4 @@
+from passwordmanager.password import generate_password
 
 
 class Credentials:
@@ -15,4 +16,4 @@ class Credentials:
             self.password = password
 
     def generate_password(self):
-        self.password = secrets.token_hex(16)
+        self.password = generate_password(length=16, complexity=1)

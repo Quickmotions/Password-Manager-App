@@ -1,4 +1,4 @@
-from entry import EntryFactory
+from passwordmanager.entry import EntryFactory
 
 
 class PasswordManager:
@@ -26,3 +26,9 @@ class PasswordManager:
             if entry.matches_query(query):
                 results.append(entry)
         return results
+
+    def save_entries(self):
+        with open("data\\PasswordData.txt", "w") as file:
+            for entry in self.entries:
+                file.write(f"{entry.id}/t{entry.get_type()}/t{entry.get_credentials()}")
+        file.close()

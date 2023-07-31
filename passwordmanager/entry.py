@@ -1,21 +1,21 @@
 import uuid
 from abc import abstractmethod, ABC
-from credentials import Credentials
+from passwordmanager.credentials import Credentials
 
 
 class EntryFactory:
     @staticmethod
-    def create_entry(entry_type, **kwargs):
+    def create_entry(entry_type, *args):
         if entry_type == "website":
-            return WebsiteLogin(**kwargs)
+            return WebsiteLogin(*args)
         elif entry_type == "bank_account":
-            return BankAccountLogin(**kwargs)
+            return BankAccountLogin(*args)
         else:
             raise ValueError("Invalid entry type")
 
 
 class Entry(ABC):
-    def __init__(self, **kwargs):
+    def __init__(self, *args):
         self.id = uuid.uuid4()
         self.credentials = Credentials()
 
@@ -28,7 +28,7 @@ class Entry(ABC):
         pass
 
     @abstractmethod
-    def update(self, **kwargs):
+    def update(self, *args):
         pass
 
     def matches_query(self, query):
@@ -36,26 +36,26 @@ class Entry(ABC):
 
 
 class WebsiteLogin(Entry):
-    def __init__(self, website, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, website, *args):
+        super().__init__(*args)
         self.website = website
 
     def get_type(self):
         return "Website Login"
 
     def get_credentials(self):
-        return f"Website: {self.website}\n{self.credentials}"
+        return f"Website: {self.website}\t{self.credentials}"
 
-    def update(self, website=None, **kwargs):
+    def update(self, website=None, *args):
         if website:
             self.website = website
-        if kwargs:
-            self.credentials.update(**kwargs)
+        if args:
+            self.credentials.update(*args)
 
 
 class BankAccountLogin(Entry):
-    def __init__(self, bank_name, account_number, routing_number, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, bank_name, account_number, routing_number, *args):
+        super().__init__(*args)
         self.bank_name = bank_name
         self.account_number = account_number
         self.routing_number = routing_number
@@ -64,16 +64,16 @@ class BankAccountLogin(Entry):
         return "Bank Account Login"
 
     def get_credentials(self):
-        return f"Bank: {self.bank_name}\nAccount Number: {self.account_number}\nRouting Number: {self.routing_number}\n{self.credentials}"
+        return f"{self.bank_name}\t{self.account_number}\t{self.routing_number}\t{self.credentials}"
 
-    def update(self, bank_name=None, account_number=None, routing_number=None, **kwargs):
+    def update(self, bank_name=None, account_number=None, routing_number=None, *args):
         if bank_name:
             self.bank_name = bank_name
         if account_number:
             self.account_number = account_number
         if routing_number:
             self.routing_number = routing_number
-        if kwargs:
-            self.credentials.update(**kwargs)
+        if args:
+            self.credentials.update(*args)
 
 
