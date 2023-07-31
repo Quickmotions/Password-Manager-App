@@ -8,8 +8,8 @@ def save_entries(file_path, entries):
         with open(file_path, 'wb') as file:
             pickle.dump(entries, file)
         print("Entries saved successfully.")
-    except IOError:
-        print("Error: Unable to save entries to the file.")
+    except IOError as e:
+        print(f"Error: Unable to save entries to the file.\n{e}")
 
 def load_entries(file_path):
     # Load the list of entries from a file using deserialization (pickle)
@@ -18,6 +18,6 @@ def load_entries(file_path):
             entries = pickle.load(file)
         print("Entries loaded successfully.")
         return entries
-    except (IOError, pickle.UnpicklingError):
-        print("Error: Unable to load entries from the file.")
+    except (IOError, pickle.UnpicklingError) as e:
+        print(f"Error: Unable to save entries to the file.\n{e}")
         return []

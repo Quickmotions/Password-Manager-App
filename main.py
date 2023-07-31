@@ -109,13 +109,11 @@ def search_entries(password_manager):
 
 
 def save_entries(password_manager, encryption_key):
-    password_manager.save_entries("\\data\\passwords.pkl", encryption_key)
-    print("Entries saved successfully.")
+    password_manager.save_entries("../data/passwords.pkl", encryption_key)
 
 
 def load_entries(password_manager, encryption_key):
-    password_manager.load_entries("\\data\\passwords.pkl", encryption_key)
-    print("Entries loaded successfully.")
+    password_manager.load_entries("../data/passwords.pkl", encryption_key)
 
 
 if __name__ == "__main__":

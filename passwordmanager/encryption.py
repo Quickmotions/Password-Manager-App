@@ -1,6 +1,7 @@
 # Fergus Haak - 31/07/2023 - encryption - Password Manager Program
 
 from cryptography.fernet import Fernet
+import pickle
 
 def generate_key():
     # Generate a random encryption key
