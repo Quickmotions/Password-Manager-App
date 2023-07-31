@@ -7,11 +7,9 @@ from passwordmanager.encryption import generate_key
 
 
 def main():
-    # Generate a random encryption key (for demonstration purposes)
-    encryption_key = generate_key()
-
     # Create an instance of the PasswordManager class
     password_manager = PasswordManager()
+    encryption_key = password_manager.load_encryption_key("../data/key.pkl")
 
     while True:
         choice = get_choice()
@@ -31,6 +29,8 @@ def main():
             save_entries(password_manager, encryption_key)
         elif choice == 6:
             load_entries(password_manager, encryption_key)
+        elif choice == 7:
+            export_entries(password_manager)
         else:
             print("Invalid choice. Please try again.")
 
@@ -43,6 +43,7 @@ def get_choice():
     print("4. Search Entries")
     print("5. Save Entries")
     print("6. Load Entries")
+    print("7. Export Entries")
     print("0. Exit")
 
     while True:
@@ -114,6 +115,10 @@ def save_entries(password_manager, encryption_key):
 
 def load_entries(password_manager, encryption_key):
     password_manager.load_entries("../data/passwords.pkl", encryption_key)
+
+
+def export_entries(password_manager):
+    password_manager.export_to_csv("../data/exported.csv")
 
 
 if __name__ == "__main__":

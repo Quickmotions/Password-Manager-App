@@ -5,13 +5,15 @@ from passwordmanager.encryption import encrypt, decrypt
 from passwordmanager.storage import save_entries, load_entries
 from passwordmanager.input_validation import validate_input
 
+import csv
+
 class PasswordManager:
     def __init__(self):
         self.entries = []
 
     def create_entry(self, entry_data) -> None:
         # Create a new entry using the EntryFactory and add it to the entries list
-        if validate_input(entry_data):
+        if validate_input(entry_data, self.entries):
             entry_type = entry_data.get("type")  # Assuming the 'type' key indicates the entry type
             if entry_type == "Login":
                 entry = EntryFactory.create_login_entry(
@@ -87,5 +89,37 @@ class PasswordManager:
         encrypted_entries = load_entries(file_path)
         self.entries = decrypt(encrypted_entries, encryption_key)
 
+    def save_encryption_key(self, file_path, encryption_key):
+        save_entries(file_path, encryption_key)
+
+    def load_encryption_key(self, file_path):
+        return load_entries(file_path)
+
+    def export_to_csv(self, file_path):
+        # Define the field names for the CSV file
+        field_names = ["Entry ID", "Type", "Username", "Password", "Website", "Cardholder Name", "Card Number",
+                       "Expiration Date", "CVV"]
+
+        # Prepare the data to write to the CSV file
+        data_to_write = []
+        for entry in self.entries:
+            entry_data = {
+                "Entry ID": entry.entry_id,
+                "Type": entry.get_type(),
+                "Username": entry.username,
+                "Password": entry.password,
+                "Website": getattr(entry, "website", ""),  # Using getattr to handle optional attributes
+                "Cardholder Name": getattr(entry, "username", ""),  # Using getattr to handle optional attributes
+                "Card Number": getattr(entry, "password", ""),  # Using getattr to handle optional attributes
+                "Expiration Date": getattr(entry, "expiration_date", ""),  # Using getattr to handle optional attributes
+                "CVV": getattr(entry, "cvv", ""),  # Using getattr to handle optional attributes
+            }
+            data_to_write.append(entry_data)
+
+        # Write data to the CSV file
+        with open(file_path, "w", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(data_to_write)
 
 # Additional helper functions (if needed) can be defined outside the class
